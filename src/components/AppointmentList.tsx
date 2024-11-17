@@ -1,6 +1,6 @@
 // AppointmentList.tsx
 import React from 'react';
-import { Appointment } from './types';
+import { Appointment } from '../types';
 
 interface AppointmentListProps {
   appointments: Appointment[];

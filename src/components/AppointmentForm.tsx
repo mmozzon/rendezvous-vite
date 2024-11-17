@@ -1,6 +1,5 @@
-// AppointmentForm.tsx
 import React, { useState } from 'react';
-import { Appointment } from './types';
+import { Appointment } from '../types';
 
 interface AppointmentFormProps {
   onAddAppointment: (appointment: Appointment) => void;
