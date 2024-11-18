@@ -1,47 +1,15 @@
-//import React from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { useState } from 'react'
-import AppointmentForm  from '../components/AppointmentForm';
-import AppointmentList  from '../components/AppointmentList';
-import LogList from '../LogList'
-import { Appointment, Log} from '../types'
-
-const Home: React.FC = () => {
-
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [logs, setLogs] = useState<Log[]>([]);
-
-  const addLog = (message: string) => {
-    const newLog: Log = {
-      id: Date.now().toString(),
-      message,
-      timestamp: new Date().toLocaleString(),
-    };
-    setLogs((prevLogs) => [...prevLogs, newLog]);
-  };
-  
-  const addAppointment = (appointment: Appointment) => {
-    setAppointments((prev) => [...prev, appointment]);
-    addLog(`Rendez-vous ajouté : ${appointment.patient_name} le ${appointment.date} à ${appointment.time} chez docteur: ${appointment.doctor_name}`);
-  };
-
-  const deleteAppointment = (id: string) => {
-    const appointment = appointments.find((app) => app.id === id);
-    if (appointment) {
-      setAppointments((prev) => prev.filter((app) => app.id !== id));
-      addLog(`Rendez-vous supprimé : ${appointment.patient_name} le ${appointment.date} à ${appointment.time} chez docteur: ${appointment.doctor_name}`);
-    }
-
-}; 
-
-  return (
-    <>
-        <h1>Gestion des Prises de Rendez-vous</h1>
-        <AppointmentForm onAddAppointment={addAppointment} />
-        <AppointmentList appointments={appointments} onDeleteAppointment={deleteAppointment} />
-        <LogList logs={logs} />
-    </>
-  );
-};
+const Home: React.FC = () => (
+  <div>
+    <h1>Bienvenue à la clinique privée du Docteur Kamel</h1>
+    <nav>
+      <h4><Link to="/create">Prise de rendez-vous</Link></h4>
+      <h4><Link to="/appointments">Liste des rendez-vous</Link></h4>
+      <h4><Link to="/logs">Accès aux logs</Link></h4>
+    </nav>
+  </div>
+);
 
 export default Home;

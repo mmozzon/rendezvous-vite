@@ -1,36 +1,38 @@
 import React, { useState } from 'react';
-import { Appointment } from '../types';
+import { useDispatch } from 'react-redux';
+import { addAppointment } from '../store/appointmentsSlice';
+import { useNavigate } from 'react-router-dom';
+import { addLog } from '../store/logsSlice'
+import { Link } from 'react-router-dom';
 
-interface AppointmentFormProps {
-  onAddAppointment: (appointment: Appointment) => void;
-}
-
-const AppointmentForm: React.FC<AppointmentFormProps> = ({ onAddAppointment }) => {
+const CreateAppointment: React.FC = () => {
+    
   const [patient_name, setPatientName] = useState('');
   const [doctor_name, setDoctorName] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  // Création d'un objet newAppointment
+  const newAppointment = {
+    id: Date.now().toString(), // Génère un identifiant unique
+    patient_name,
+    doctor_name,
+    date,
+    time,
+  };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (patient_name && doctor_name && date && time) {
-      const newAppointment: Appointment = {
-        id: Date.now().toString(),
-        patient_name,
-        doctor_name,
-        date,
-        time
-      };
-      onAddAppointment(newAppointment);
-      setPatientName('');
-      setDoctorName('');
-      setDate('');
-      setTime('');
-    }
+    dispatch(addAppointment(newAppointment));
+    dispatch(addLog(`Rendez-vous ajouté : ${newAppointment.patient_name} le ${newAppointment.date} à ${newAppointment.time} chez docteur ${newAppointment.doctor_name}`));
+    navigate('/appointments');
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Gestion de prise de rendez-vous</h1>
       <input
         type="text"
         placeholder="Nom du patient"
@@ -57,9 +59,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({ onAddAppointment }) =
         onChange={(e) => setTime(e.target.value)}
         required
       />
+
       <button type="submit">Prendre Rendez-vous</button>
+      <h4><Link to="/">Page d'accueil</Link></h4>
     </form>
+    
   );
 };
 
-export default AppointmentForm;
+export default CreateAppointment;
