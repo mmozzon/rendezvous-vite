@@ -22,8 +22,13 @@ const logsSlice = createSlice({
       console.log("log ajouté");
       state.logs.push(newLog);
     },
+    clearLogs: (state) => {
+      state.logs = [];
+      console.log("log supprimé");
+    },
   },
 });
 
 export const { addLog } = logsSlice.actions;
+export const { clearLogs } = logsSlice.actions;
 export default logsSlice.reducer;
