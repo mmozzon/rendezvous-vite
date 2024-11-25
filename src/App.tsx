@@ -5,6 +5,8 @@ import Appointments from './pages/Appointments';
 import LogList from './components/LogList';
 import CreateAppointment from './pages/CreateAppointment';
 
+import './index.css'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -31,3 +33,16 @@ const router = createBrowserRouter([
 const App: React.FC = () => <RouterProvider router={router} />;
 
 export default App;
+
+
+/** 
+import './index.css'
+
+export default function App() {
+  return (
+    <h1 className="container text-3xl font-bold underline">
+      Hello world!
+    </h1>
+  )
+}
+  **/
