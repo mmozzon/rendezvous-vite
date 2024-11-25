@@ -7,7 +7,7 @@ const Navbar = () => {
       
         {/* Logo (Image) */}
         <div>
-              <img src="/src/assets/logo.jfif" className="h-14 w-auto transition-transform duration-1000 hover:scale-150" />
+              <img src="/src/assets/logo.webp" className="h-14 w-auto transition-transform duration-1000 hover:scale-150" />
         </div>
 
         {/* Navigation Links */}
