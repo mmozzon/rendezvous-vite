@@ -13,5 +13,3 @@ const Home: React.FC = () => (
 );
 
 export default Home;
-
-//<h1>Bienvenue à la clinique privée du Docteur Kamel</h1>

@@ -1,36 +1,16 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './pages/Home';
-import Appointments from './pages/Appointments';
-import LogList from './components/LogList';
-import CreateAppointment from './pages/CreateAppointment';
+//import React from 'react';
+import Navbar from './components/Navbar'; // Composant Navbar
+import Footer from './components/Footer'; // Composant Footer
+import { Outlet } from 'react-router-dom'; // Outlet pour le contenu dynamique des sous-routes
 
-import './index.css'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/appointments',
-    element: <Appointments />,
-  },
-  {
-    path: '/create',
-    element: <CreateAppointment />,
-  },
-  {
-    path: '/logs',
-    element: <LogList />,
-  },
-  {
-    path: '*',
-    element: <div>Page non trouvée</div>,
-  },
-]);
-
-const App: React.FC = () => <RouterProvider router={router} />;
+const App = () => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />  {/* Composant Navbar visible sur toutes les pages */}
+      <Outlet />  {/* Rendu des sous-routes ici */}
+      <Footer />  {/* Composant Footer visible sur toutes les pages */}
+    </div>
+  );
+};
 
 export default App;
-

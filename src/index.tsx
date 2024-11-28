@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './store/store';
-//import App from './App';
-import Navbar from './components/Navbar';
+import  { store} from './store/store';
+import { router } from './router';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <Navbar />
-     { /*<App />  */}
+      <RouterProvider router={router}>
+      </RouterProvider>
     </Provider>
   </React.StrictMode>
 );
