@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App'; 
-import Main from './pages/Main'; 
+import Home from './pages/Home'; 
 import AboutUs from './pages/AboutUs'; 
-//import Contact from './pages/Contact'; // Composant pour la page "Nous contacter"
+import RendezVous from './pages/RendezVous'; 
+import Fonctionnement from './pages/Fonctionnement';
+import ContactUs from './pages/ContactUs'; // Composant pour la page "Nous contacter"
 
 export const router = createBrowserRouter([
   {
@@ -10,12 +12,32 @@ export const router = createBrowserRouter([
     element: <App />, // Composant principal qui contient un <Outlet />
     children: [
       {
-        path: "/", // Sous-route pour la page d'accueil
-        element: <Main /> // Affiché dans <Outlet /> quand l'URL est "/"
+        path: "/",
+        element: <Home /> 
       },
       {
-        path: "/about", // Sous-route pour la page "Mieux nous connaître"
-        element: <AboutUs /> // Affiché dans <Outlet /> quand l'URL est "/about"
+        path: "/about",
+        element: <AboutUs /> 
+      },
+      {
+        path: "/fonctionnement", 
+        element: <Fonctionnement /> 
+      },
+      {
+        path: "/rendezvous", 
+        element: <RendezVous /> 
+      },
+      {
+        path: "/contact", 
+        element: <ContactUs /> 
+      },
+      {
+        path: "/politique", 
+        element: <Home /> 
+      },
+      {
+        path: "/credits", 
+        element: <Home /> 
       }
     ]
   }

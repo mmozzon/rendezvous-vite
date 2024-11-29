@@ -3,7 +3,7 @@ import '../index.css'
 const AboutUs: React.FC = () => {
     return (
      <h1 className="flex-grow">
-        Ceci est une autre page
+        Ceci est la page a notre sujet
      </h1>
     )
 };

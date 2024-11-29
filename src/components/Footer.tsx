@@ -1,4 +1,5 @@
 import '../index.css'
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
     return (
@@ -99,31 +100,21 @@ const Footer: React.FC = () => {
         
         </div>
 
-        <div className="text-center text-xs">
-            <ul className="inline-block space-x-4">
-              <li className="inline-block">
-                <a href="/home" className="hover:text-blue-400 transition">
+        {/* Navigation Links */}
+        <div className="text-center text-xs space-x-4 flex justify-center">
+                <Link to="/politique" className="hover:text-blue-400 transition">
                   Politique de confidentialité
-                </a>
-              </li>
-              <li className="inline-block">
-                <a href="/about" className="hover:text-blue-400 transition">
-                  Crédit
-                </a>
-              </li>
-              <li className="inline-block">
-                <a href="/services" className="hover:text-blue-400 transition">
+                </Link>
+                <Link to="/credits" className="hover:text-blue-400 transition">
+                  Crédits
+                </Link>
+                <Link to="/about" className="hover:text-blue-400 transition">
                   A propos de nous
-                </a>
-              </li>
-              <li className="inline-block">
-                <a href="/contact" className="hover:text-blue-400 transition">
+                </Link>
+                <Link to="/contact" className="hover:text-blue-400 transition">
                   Contact
-                </a>
-              </li>
-            </ul>
+                </Link>
         </div>
-
 
         {/* Section finale : Crédits */}
         {/*

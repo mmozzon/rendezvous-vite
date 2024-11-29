@@ -24,13 +24,13 @@ const Navbar: React.FC = () => {
         <Link to="/about" className="hover:text-blue-300 hover:italic hover:underline">
           Mieux nous connaître
         </Link>
-        <Link to="/about" className="hover:text-blue-300 hover:italic hover:underline">
+        <Link to="/fonctionnement" className="hover:text-blue-300 hover:italic hover:underline">
           Fonctionnement du cabinet
         </Link>
-        <Link to="/about" className="hover:text-blue-300 hover:italic hover:underline">
+        <Link to="/rendezvous" className="hover:text-blue-300 hover:italic hover:underline">
           Prendre rendez-vous
         </Link>
-        <Link to="/about" className="hover:text-blue-300 hover:italic hover:underline">
+        <Link to="/contact" className="hover:text-blue-300 hover:italic hover:underline">
           Nous contacter
         </Link>
     </div>

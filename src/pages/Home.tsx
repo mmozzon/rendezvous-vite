@@ -1,15 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import '../index.css'
 
-const Home: React.FC = () => (
-  <div>
-    <nav>
-      <h1>Bienvenue à la clinique privée du Docteur Kamel</h1>
-      <h4><Link to="/create">Prise de rendez-vous</Link></h4>
-      <h4><Link to="/appointments">Liste des rendez-vous</Link></h4>
-      <h4><Link to="/logs">Accès aux logs</Link></h4>
-    </nav>
-  </div>
-);
+const Home: React.FC = () => {
+    return (
+     <h1 className="flex-grow">
+        Ceci est la page d'accueil
+     </h1>
+    )
+};
 
 export default Home;
