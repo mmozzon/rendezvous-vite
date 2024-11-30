@@ -19,13 +19,13 @@ const doctors: Doctor[] = [
         <h1 className="text-xl font-bold text-left ml-20 mb-6 text-gray-800">
           Prendre rendez-vous avec:
         </h1>
-  
+
         {/* Conteneur pour les cartes de médecins, centré avec un espacement entre les éléments */}
         <div className="max-w-6xl ml-20 flex flex-col gap-6">
           {doctors.map((doctor) => (
             <div
               key={doctor.id}
-              className="flex items-center bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
+              className="flex items-center bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow hover:bg-gray-200 transition-colors"
             >
               {/* Nom du médecin à gauche */}
               <h2 className="text-xl font-semibold text-blue-600">{doctor.name}</h2>
