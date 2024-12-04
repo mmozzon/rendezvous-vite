@@ -1,10 +1,18 @@
 import '../index.css'
+import { Link } from 'react-router-dom';
 
 interface Doctor {
     id: number;
     name: string;
   }
-  
+
+interface Patient {
+        id: number;
+    name: string;
+}
+
+const patient: Patient = {id: 111 , name: "Michel Mozzon"};
+
 const doctors: Doctor[] = [
     { id: 1, name: "Dr. Jean Bison" },
     { id: 2, name: "Dr. Marie Dauphin" },
@@ -31,9 +39,12 @@ const doctors: Doctor[] = [
               <h2 className="text-xl font-semibold text-blue-600">{doctor.name}</h2>
   
               {/* Bouton "Choisir" aligné à droite */}
-              <button className="ml-auto bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors">
-                Choisir
-              </button>
+              <Link to="/calendar"
+                    className="ml-auto bg-blue-500 text-white px-4 py-2 rounded-full hover:text-red-300 hover:italic hover:underline hover:bg-blue-600 transition-colors text-center"
+                    state={{doctor, patient} }
+              > 
+                    Choisir
+              </Link>
             </div>
           ))}
         </div>
@@ -43,14 +54,3 @@ const doctors: Doctor[] = [
   
   
 export default DoctorsList;
-
-{/*
-const RendezVous: React.FC = () => {
-    return (
-     <h1 className="flex-grow">
-        Ceci est la page de prise de rendez-vous
-     </h1>
-    )
-};
-
-export default RendezVous; */}

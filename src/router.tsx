@@ -3,6 +3,7 @@ import App from './App';
 import Home from './pages/Home'; 
 import AboutUs from './pages/AboutUs'; 
 import RendezVous from './pages/RendezVous'; 
+import Calendar from './pages/Calender'; 
 import Fonctionnement from './pages/Fonctionnement';
 import ContactUs from './pages/ContactUs'; // Composant pour la page "Nous contacter"
 
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: "/credits", 
         element: <Home /> 
+      },
+      {
+        path: "/calendar", 
+        element: <Calendar /> 
       }
     ]
   }
