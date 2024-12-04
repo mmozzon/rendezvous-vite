@@ -58,6 +58,13 @@ const MyCalendar: React.FC = () => {
       alert("Veuillez ajouter un titre pour l'événement.");
       return;
     }
+    for (let forevent of events) {
+      if (forevent.start.getTime() === event.start.getTime()) {
+        alert("Plage horaire non disponible, veuillez en sélectionner une autre");
+        return;
+      }
+    }
+
     setEvents((prevEvents) => [...prevEvents, event]);
     setNewEvent({
       title:  patientDetails.name,
@@ -94,7 +101,7 @@ const MyCalendar: React.FC = () => {
               const startDate = roundTo30Minutes(new Date(e.target.value));
               let endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
               // Vérifier si l'heure de fin dépasse 23:59 et l'ajuster
-              const endOfDay = new Date();
+              const endOfDay = new Date(startDate);
               endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
                 // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
               if (endDate > endOfDay) {
@@ -153,12 +160,14 @@ const MyCalendar: React.FC = () => {
         onSelectSlot={(slotInfo) => {
           const start = roundTo30Minutes(slotInfo.start);
           let end = new Date(start.getTime() + 30 * 60 * 1000);
-          const endOfDay = new Date();
+ 
+          const endOfDay = new Date(slotInfo.start);
           endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
-            // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
+          // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
           if (end > endOfDay) {
             end = endOfDay;
           }
+            
           const updatedEvent = { ...newEvent, start, end };
 
           // Ajout immédiat de l'événement après sélection
