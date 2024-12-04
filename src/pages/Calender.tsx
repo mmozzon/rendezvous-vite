@@ -36,6 +36,15 @@ const MyCalendar: React.FC = () => {
     end: new Date(new Date().getTime() + 30 * 60 * 1000),
   });
 
+  const handleDeleteEvent = (eventToDelete: Event) => {
+    setEvents(function (prevEvents) {
+      return prevEvents.filter(function (event) {
+        return event !== eventToDelete;
+      });
+    });
+    //setEvents((prevEvents) => prevEvents.filter(event => event !== eventToDelete));
+  };
+
   // Fonction pour arrondir à la demi-heure
   const roundTo30Minutes = (date: Date) => {
     const minutes = date.getMinutes();
@@ -83,7 +92,14 @@ const MyCalendar: React.FC = () => {
             value={newEvent.start.toLocaleString("sv-SE").replace(" ", "T").slice(0, 16)}
             onChange={(e) => {
               const startDate = roundTo30Minutes(new Date(e.target.value));
-              const endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
+              let endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
+              // Vérifier si l'heure de fin dépasse 23:59 et l'ajuster
+              const endOfDay = new Date();
+              endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
+                // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
+              if (endDate > endOfDay) {
+                endDate = endOfDay;
+              }
               setNewEvent({ ...newEvent, start: startDate, end: endDate });
             }}
           />
@@ -114,20 +130,41 @@ const MyCalendar: React.FC = () => {
         style={{ height: 500 }}
         step={30}
         timeslots={1}
-        events={events.map((event) => ({
-          ...event,
-          title: `${event.title} - ${event.doctor}`, // Ajoutez le doctor dans le titre
-        }))}
+        //min={new Date(0, 0, 0, 6, 0, 0)} // Heure minimale (8:00)
+        //max={new Date(0, 0, 0, 21, 0, 0)} // Heure maximale (20:00)
+        events={events} 
+        components={{
+          event: ({ event }) => (
+            <div>
+              <span>{`${event.title} - ${event.doctor}`}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Empêche la propagation du clic à la sélection de l'événement
+                  handleDeleteEvent(event);
+                }}
+                className="ml-2 text-red-500 hover:underline"
+              >
+                Supprimer
+              </button>
+            </div>
+          ),
+        }}
         selectable
         onSelectSlot={(slotInfo) => {
           const start = roundTo30Minutes(slotInfo.start);
-          const end = new Date(start.getTime() + 30 * 60 * 1000);
+          let end = new Date(start.getTime() + 30 * 60 * 1000);
+          const endOfDay = new Date();
+          endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
+            // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
+          if (end > endOfDay) {
+            end = endOfDay;
+          }
           const updatedEvent = { ...newEvent, start, end };
 
           // Ajout immédiat de l'événement après sélection
           handleAddEvent(updatedEvent);
         }}
-        onSelectEvent={(event) => alert(`Événement : ${event.title}`)}
+        onSelectEvent={(event) => alert(`Événement : ${event.title} - ${event.doctor}`)}
       />
     </div>
   );
