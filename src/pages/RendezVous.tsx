@@ -11,7 +11,7 @@ interface Patient {
     name: string;
 }
 
-const patient: Patient = {id: 111 , name: "Michel Mozzon"};
+let patient: Patient = {id: 111 , name: "Michel Mozzon"};
 
 const doctors: Doctor[] = [
     { id: 1, name: "Dr. Jean Bison" },
@@ -23,10 +23,21 @@ const doctors: Doctor[] = [
   const DoctorsList: React.FC = () => {
     return (
       <div className="bg-gray-50 min-h-screen p-6">
-        {/* Titre aligné à gauche avec un espacement cohérent */}
-        <h1 className="text-xl font-bold text-left ml-20 mb-6 text-gray-800">
-          Prendre rendez-vous avec:
-        </h1>
+
+        <div className="flex">   
+             
+          {/* Titre aligné à gauche avec un espacement cohérent */}
+          <h1 className="text-xl font-bold text-left ml-20 mb-6 text-gray-800">
+            Prendre rendez-vous avec:
+          </h1>          
+          {/* Bouton "Choisir" aligné à droite */}
+          <Link to="/calendar"
+                 className="ml-auto text-blue-500 hover:text-blue-700 underline transition-all"
+                 state={{ doctor: { id: 0, name: "" }, patient: { id: 0, name: "" } }}
+          > 
+                Consulter l'agenda
+          </Link>
+        </div>
 
         {/* Conteneur pour les cartes de médecins, centré avec un espacement entre les éléments */}
         <div className="max-w-6xl ml-20 flex flex-col gap-6">

@@ -4,6 +4,10 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale/fr";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { addEvent, deleteEvent } from "../store/eventsSlice";
+import { RootState } from "../store/store";
 
 // Configuration du localizer
 const locales = { fr };
@@ -25,25 +29,59 @@ interface Event {
 
 const MyCalendar: React.FC = () => {
   const location = useLocation();
-  const doctorDetails = location.state.doctor as { id: number; name: string };
+  const doctorDetails = location.state.doctor as { id: number; name: string } ;
   const patientDetails = location.state.patient as { id: number; name: string };
+  const navigate = useNavigate(); 
+  const dispatch = useDispatch();
 
-  const [events, setEvents] = useState<Event[]>([]);
+  // État temporaire pour le titre de l'événement
+  const [inputTitle, setInputTitle] = useState(patientDetails.name);
+
+ //const events = useSelector((state: RootState) => state.events);
+
+  // Gestion des événements depuis Redux
+  const events = useSelector((state: RootState) =>
+    state.events.events.map((event) => ({
+      ...event,
+      start: new Date(event.start),
+      end: new Date(event.end),
+    }))
+  );
+  //const [events, setEvents] = useState<Event[]>([]);
+
   const [newEvent, setNewEvent] = useState<Event>({
-    title: patientDetails.name,
-    doctor: doctorDetails.name,
+    title: patientDetails?.name || "",
+    doctor: doctorDetails?.name || "",
     start: new Date(),
     end: new Date(new Date().getTime() + 30 * 60 * 1000),
   });
 
+ // Fonction de gestion du changement de l'input
+ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setInputTitle(e.target.value); // Mise à jour de l'état temporaire
+};
+
+  
+  const handleDeleteEvent = (eventToDelete: Event) => {
+    dispatch(deleteEvent(eventToDelete));
+  };
+  
+
+  /** 
   const handleDeleteEvent = (eventToDelete: Event) => {
     setEvents(function (prevEvents) {
       return prevEvents.filter(function (event) {
         return event !== eventToDelete;
+        return event !== eventToDelete;
       });
     });
-    //setEvents((prevEvents) => prevEvents.filter(event => event !== eventToDelete));
-  };
+
+    //  Forme condensée
+    //const handleDeleteEvent = (eventToDelete: Event) => {
+    //  setEvents((prevEvents) => prevEvents.filter((event) => event !== eventToDelete));
+    // };  
+    
+  }; **/
 
   // Fonction pour arrondir à la demi-heure
   const roundTo30Minutes = (date: Date) => {
@@ -54,10 +92,19 @@ const MyCalendar: React.FC = () => {
 
   // Ajouter un nouvel événement
   const handleAddEvent = (event: Event) => {
-    if (!newEvent.title) {
+
+    event.title= inputTitle;
+
+    if (!event.title) {
       alert("Veuillez ajouter un titre pour l'événement.");
       return;
     }
+    if (!event.doctor) {
+      alert("Veuillez choisir un praticien");
+      navigate('/rendezvous');
+      return;
+    }
+
     for (let forevent of events) {
       if (forevent.start.getTime() === event.start.getTime()) {
         alert("Plage horaire non disponible, veuillez en sélectionner une autre");
@@ -65,13 +112,17 @@ const MyCalendar: React.FC = () => {
       }
     }
 
-    setEvents((prevEvents) => [...prevEvents, event]);
+    //setEvents((prevEvents) => [...prevEvents, event]);
+    dispatch(addEvent(event));
+
     setNewEvent({
       title:  patientDetails.name,
       doctor: doctorDetails.name,
       start: new Date(),
       end: new Date(new Date().getTime() + 30 * 60 * 1000)
     });
+
+    setInputTitle(patientDetails.name); 
   };
 
   return (
@@ -87,8 +138,8 @@ const MyCalendar: React.FC = () => {
           type="text"
           placeholder="Titre"
           className="border p-2 mb-2 w-full"
-          value={patientDetails.name}
-          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+          value={inputTitle} // L'input est contrôlé par inputTitle
+          onChange={handleInputChange}
         />
 
         <div className="flex gap-4 mb-2">
