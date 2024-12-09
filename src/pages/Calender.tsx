@@ -40,14 +40,21 @@ const MyCalendar: React.FC = () => {
  //const events = useSelector((state: RootState) => state.events);
 
   // Gestion des événements depuis Redux
-  const events = useSelector((state: RootState) =>
-    state.events.events.map((event) => ({
+
+    const events = useSelector((state: RootState) =>
+    state.eventsredux.events.map((event) => ({
       ...event,
-      start: new Date(event.start),
-      end: new Date(event.end),
+      start: event.start instanceof Date ? event.start : new Date(event.start), // Si déjà Date, pas besoin de convertir
+      end: event.end instanceof Date ? event.end : new Date(event.end), // Idem pour end
     }))
   );
-  //const [events, setEvents] = useState<Event[]>([]);
+ 
+  /** 
+ console.log("list events");
+  events.forEach((event) => {
+    console.log("un event start:" , event.start);
+  });
+  **/
 
   const [newEvent, setNewEvent] = useState<Event>({
     title: patientDetails?.name || "",
@@ -60,13 +67,13 @@ const MyCalendar: React.FC = () => {
  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setInputTitle(e.target.value); // Mise à jour de l'état temporaire
 };
-
-  
+ 
   const handleDeleteEvent = (eventToDelete: Event) => {
+    //console.log("Event to delete:", eventToDelete.start);
+    //console.log("Current events in Redux:", events);
     dispatch(deleteEvent(eventToDelete));
   };
   
-
   /** 
   const handleDeleteEvent = (eventToDelete: Event) => {
     setEvents(function (prevEvents) {
@@ -96,7 +103,7 @@ const MyCalendar: React.FC = () => {
     event.title= inputTitle;
 
     if (!event.title) {
-      alert("Veuillez ajouter un titre pour l'événement.");
+      alert("Veuillez ajouter un nom d'un patient pour l'événement.");
       return;
     }
     if (!event.doctor) {
@@ -136,7 +143,7 @@ const MyCalendar: React.FC = () => {
         </h2>
         <input
           type="text"
-          placeholder="Titre"
+          placeholder="Patient"
           className="border p-2 mb-2 w-full"
           value={inputTitle} // L'input est contrôlé par inputTitle
           onChange={handleInputChange}

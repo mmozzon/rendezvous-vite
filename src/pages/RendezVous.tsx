@@ -1,5 +1,7 @@
 import '../index.css'
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 interface Doctor {
     id: number;
@@ -21,6 +23,26 @@ const doctors: Doctor[] = [
   ];
 
   const DoctorsList: React.FC = () => {
+
+    const users = useSelector((state: RootState) =>
+      state.usersredux.users.map((user) => ({
+        ...user,
+      }))
+    );
+
+    // Recherche de l'utilisateur correspondant
+    const user = users.find(
+      (user) => user.isLoggedIn
+    );
+
+    patient.id = 0;
+    let current_firstname: string | undefined= user?.firstname
+    let current_name: string | undefined= user?.name
+    if (current_firstname === undefined) current_firstname = "";
+    if (current_name === undefined) current_name = "";
+
+    patient.name = `${current_firstname} ${current_name}`;
+
     return (
       <div className="bg-gray-50 min-h-screen p-6">
 

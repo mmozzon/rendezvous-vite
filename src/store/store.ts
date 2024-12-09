@@ -1,26 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
-import eventsReducer from "./eventsSlice";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // Utilise localStorage
+import persistedReducer from "./persistedReducer";
+import { persistStore } from "redux-persist";
+//import storage from "redux-persist/lib/storage"; // Utilise localStorage
 
 // Configuration de redux-persist
-const persistConfig = {
+/**
+ * const persistConfig = {
   key: "root", // Clé de stockage dans localStorage
   storage,
 };
+**/
 
-const persistedReducer = persistReducer(persistConfig, eventsReducer);
+//const persistedReducer = persistReducer(persistConfig, eventsReducer);
 
-export const store = configureStore({
-    reducer: {
-        //appointments: appointmentReducer,
-        //logs: logsReducer, 
-        events: persistedReducer, // Remplace par le reducer persisté
-    },
+
+  export const store = configureStore({
+    reducer: persistedReducer,
   });
 
 export const persistor = persistStore(store);
-persistor.purge();  
+//persistor.purge();  
 
   // Types pour TypeScript
 export type RootState = ReturnType<typeof store.getState>;

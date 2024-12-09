@@ -1,7 +1,15 @@
 import '../index.css'
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const Navbar: React.FC = () => {
+
+// Sélectionne l'utilisateur actuellement connecté
+const currentUser = useSelector((state: RootState) =>
+  state.usersredux.users.find((user) => user.isLoggedIn)
+);
+
   return (
 <nav className="bg-green-500 text-white font-bold p-4 flex items-center">
   <div className="container mx-auto flex  flex-wrap items-center justify-between gap-5">
@@ -17,7 +25,8 @@ const Navbar: React.FC = () => {
     </div>
     
     {/* Navigation Links */}
-    <div className="flex flex-wrap items-center justify-center gap-6 text-lg whitespace-nowrap">
+    <div className="flex justify-center gap-6 px-2 whitespace-nowrap">
+    <div className="flex flex-wrap items-center justify-start gap-6 text whitespace-nowrap">
         <Link to="/" className="hover:text-blue-300 hover:italic hover:underline">
           Accueil
         </Link>
@@ -37,17 +46,30 @@ const Navbar: React.FC = () => {
 
     {/* Sign-in & Sign-up buttons */}
     
-    <div className="flex flex-wrap items-center gap-4 flex-shrink-0">
-      <a 
-        href="in" 
-        className="text-sm bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
-        Sign In
-      </a>
-      <a 
-        href="out" 
-        className="text-sm bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
-        Sign Up
-      </a>
+    <div className="flex items-center gap-4 flex-shrink-0">
+        <div className="flex flex-col items-center">
+          <Link to="/signup" className="text-sm bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+            SignUp
+          </Link>
+        </div>
+
+        {currentUser ? (
+          // Si connecté, afficher "Sign Out"
+        <div className="flex items-center gap-2">
+        <Link to="/signout" className="text-sm bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          state={currentUser.email}>
+          SignOut
+        </Link>
+        <p className="flex text-sm text-gray-700 mt-1 text-center"> Bonjour, {currentUser.name}</p>
+        </div>
+        ) : (
+        <div className="flex flex-col items-center">
+          <Link to="/signin" className="text-sm bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+            SignIn
+          </Link>
+        </div>
+        )}
+    </div>
     </div> 
 
   </div>
