@@ -20,12 +20,6 @@ const SignIn: React.FC = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    users.forEach((user) => {
-      //alert(user.email);
-      //alert(user.isLoggedIn);
-      //alert(user.password);
-    });
-
     // Recherche de l'utilisateur correspondant
     const user = users.find(
       (user) => user.email === email && user.password === password

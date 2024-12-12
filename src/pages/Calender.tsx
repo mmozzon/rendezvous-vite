@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { addEvent, deleteEvent } from "../store/eventsSlice";
 import { RootState } from "../store/store";
+import emailjs from "@emailjs/browser";
 
 // Configuration du localizer
 const locales = { fr };
@@ -27,10 +28,31 @@ interface Event {
   end: Date;
 }
 
+interface TemplateParams {
+  from_name: string,
+  doctor_name:  string | null,
+  name: string,
+  appointment_date: string,
+  email: string, 
+  [key: string]: string | null;
+}
+
+interface Mail {
+  service_id: string;
+  template_id: string;
+  public_key: string;
+}
+
+var mail_config: Mail ={
+  service_id: "service_0gcu4tr",
+  template_id: "template_nh7tyul",
+  public_key: "6tw9Gm8AVw1Pku9c3"
+}
+
 const MyCalendar: React.FC = () => {
   const location = useLocation();
   const doctorDetails = location.state.doctor as { id: number; name: string } ;
-  const patientDetails = location.state.patient as { id: number; name: string };
+  const patientDetails = location.state.patient as { id: number; name: string; mail: string };
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
@@ -48,7 +70,7 @@ const MyCalendar: React.FC = () => {
       end: event.end instanceof Date ? event.end : new Date(event.end), // Idem pour end
     }))
   );
- 
+
   /** 
  console.log("list events");
   events.forEach((event) => {
@@ -98,8 +120,20 @@ const MyCalendar: React.FC = () => {
   };
 
   // Ajouter un nouvel événement
-  const handleAddEvent = (event: Event) => {
+  const handleAddEvent = (event: Event, tomail: string) => {
+  const appointmentDate = event.start;
+  const date = new Date(appointmentDate);
+  const formattedDateTime = `${date.getDate()} ${date.toLocaleString('fr-FR', { month: 'long' })} ${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 
+  const templateParams: TemplateParams = {
+    from_name: "Clinique vétérinaire Elise Mozzon",
+    doctor_name:  event.doctor.toString(),
+    name: event.title.toString(),
+    appointment_date: formattedDateTime,
+    email: tomail, 
+  };
+
+    //e.preventDefault();
     event.title= inputTitle;
 
     if (!event.title) {
@@ -121,6 +155,23 @@ const MyCalendar: React.FC = () => {
 
     //setEvents((prevEvents) => [...prevEvents, event]);
     dispatch(addEvent(event));
+
+    emailjs
+    .send(
+      mail_config.service_id, // Remplace par ton Service ID
+      mail_config.template_id, // Remplace par ton Template ID
+      templateParams, // Les données du formulaire
+      mail_config.public_key // Remplace par ta clé publique
+    )
+    .then(
+      (response) => {
+        console.log("E-mail envoyé avec succès !", response.status, response.text);
+        //setIsSubmitted(true);
+      },
+      (error) => {
+        console.error("Échec de l'envoi de l'e-mail : ", error);
+      }
+    );
 
     setNewEvent({
       title:  patientDetails.name,
@@ -171,7 +222,7 @@ const MyCalendar: React.FC = () => {
         </div>
 
         <button
-          onClick={() => handleAddEvent(newEvent)}
+          onClick={() => handleAddEvent(newEvent, patientDetails.mail)}
           /*
           onClick={handleAddEvent(newEvent)}  --->  pas comme ceci
           L'attribut onClick attend une fonction (de type MouseEventHandler<HTMLButtonElement> 
@@ -229,7 +280,7 @@ const MyCalendar: React.FC = () => {
           const updatedEvent = { ...newEvent, start, end };
 
           // Ajout immédiat de l'événement après sélection
-          handleAddEvent(updatedEvent);
+          handleAddEvent(updatedEvent, patientDetails.mail);
         }}
         onSelectEvent={(event) => alert(`Événement : ${event.title} - ${event.doctor}`)}
       />

@@ -1,21 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { registerUser } from "../store/usersSlice";
-import { RootState } from "../store/store";
+//import { RootState } from "../store/store";
 
 const SignUp: React.FC = () => {
-
-  const users = useSelector((state: RootState) =>
-    state.usersredux.users.map((user) => ({
-      ...user,
-    }))
-  );
-
-  users.forEach((user) => {
-    //alert(user.name);
-    //alert(user.isLoggedIn);
-    //alert(user.password);
-  });
 
   const dispatch = useDispatch();
 

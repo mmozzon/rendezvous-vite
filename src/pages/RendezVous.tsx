@@ -9,11 +9,12 @@ interface Doctor {
   }
 
 interface Patient {
-        id: number;
+    id: number;
     name: string;
+    mail: string,
 }
 
-let patient: Patient = {id: 111 , name: "Michel Mozzon"};
+let patient: Patient = {id: 0, name: "", mail: ""};
 
 const doctors: Doctor[] = [
     { id: 1, name: "Dr. Jean Bison" },
@@ -36,12 +37,16 @@ const doctors: Doctor[] = [
     );
 
     patient.id = 0;
-    let current_firstname: string | undefined= user?.firstname
-    let current_name: string | undefined= user?.name
+    let current_firstname: string | undefined= user?.firstname;
+    let current_name: string | undefined= user?.name;
+    let current_mail: string | undefined= user?.email;
+
     if (current_firstname === undefined) current_firstname = "";
     if (current_name === undefined) current_name = "";
+    if (current_mail === undefined) current_mail = "";
 
     patient.name = `${current_firstname} ${current_name}`;
+    patient.mail = `${current_mail}`;
 
     return (
       <div className="bg-gray-50 min-h-screen p-6">

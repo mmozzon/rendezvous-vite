@@ -23,7 +23,7 @@ const eventsSlice = createSlice({
   initialState,
   reducers: {
     addEvent: (state, action: PayloadAction<Event>) => {
-      {state.events.push(action.payload)};
+      state.events.push(action.payload)
     },
     deleteEvent: (state, action: PayloadAction<Event>) => {
       state.events = state.events.filter((event) => {
