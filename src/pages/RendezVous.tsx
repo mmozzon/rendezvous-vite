@@ -37,13 +37,9 @@ const doctors: Doctor[] = [
     );
 
     patient.id = 0;
-    let current_firstname: string | undefined= user?.firstname;
-    let current_name: string | undefined= user?.name;
-    let current_mail: string | undefined= user?.email;
-
-    if (current_firstname === undefined) current_firstname = "";
-    if (current_name === undefined) current_name = "";
-    if (current_mail === undefined) current_mail = "";
+    let current_firstname: string = user?.firstname || "";
+    let current_name: string = user?.name || "";
+    let current_mail: string = user?.email || "";
 
     patient.name = `${current_firstname} ${current_name}`;
     patient.mail = `${current_mail}`;
