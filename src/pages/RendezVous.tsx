@@ -14,7 +14,7 @@ interface Patient {
     mail: string,
 }
 
-let patient: Patient = {id: 0, name: "", mail: ""};
+const patient: Patient = {id: 0, name: "", mail: ""};
 
 const doctors: Doctor[] = [
     { id: 1, name: "Dr. Jean Bison" },
@@ -37,9 +37,9 @@ const doctors: Doctor[] = [
     );
 
     patient.id = 0;
-    let current_firstname: string = user?.firstname || "";
-    let current_name: string = user?.name || "";
-    let current_mail: string = user?.email || "";
+    const current_firstname: string = user?.firstname || "";
+    const current_name: string = user?.name || "";
+    const current_mail: string = user?.email || "";
 
     patient.name = `${current_firstname} ${current_name}`;
     patient.mail = `${current_mail}`;

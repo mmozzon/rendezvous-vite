@@ -43,7 +43,7 @@ interface Mail {
   public_key: string;
 }
 
-var mail_config: Mail ={
+const mail_config: Mail ={
   service_id: "service_0gcu4tr",
   template_id: "template_nh7tyul",
   public_key: "6tw9Gm8AVw1Pku9c3"
@@ -146,7 +146,7 @@ const MyCalendar: React.FC = () => {
       return;
     }
 
-    for (let forevent of events) {
+    for (const forevent of events) {
       if (forevent.start.getTime() === event.start.getTime()) {
         alert("Plage horaire non disponible, veuillez en sélectionner une autre");
         return;
@@ -164,12 +164,12 @@ const MyCalendar: React.FC = () => {
       mail_config.public_key // Remplace par ta clé publique
     )
     .then(
-      (response) => {
-        console.log("E-mail envoyé avec succès !", response.status, response.text);
+      () => {
+        alert("E-mail envoyé avec succès à " + templateParams.email );
         //setIsSubmitted(true);
       },
-      (error) => {
-        console.error("Échec de l'envoi de l'e-mail : ", error);
+      () => {
+        alert("Échec de l'envoi de l'e-mail à " + templateParams.email );
       }
     );
 
