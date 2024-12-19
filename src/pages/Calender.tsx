@@ -3,8 +3,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { fr } from "date-fns/locale/fr";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addEvent, deleteEvent } from "../store/eventsSlice";
 import { RootState } from "../store/store";
@@ -119,7 +118,28 @@ const MyCalendar: React.FC = () => {
     return new Date(date.setMinutes(roundedMinutes, 0, 0));
   };
 
+  const validateAndSetDates = (startDate: Date) => {
+    // Arrondir à 30 minutes
+    const roundedStartDate = roundTo30Minutes(startDate);
+  
+    // Calculer la date de fin (30 minutes après le début)
+    let endDate = new Date(roundedStartDate.getTime() + 30 * 60 * 1000);
+  
+    // Ajuster l'heure de fin si elle dépasse 23:59
+    const endOfDay = new Date(roundedStartDate);
+    endOfDay.setHours(23, 59, 59, 999);
+  
+    if (endDate > endOfDay) {
+      endDate = endOfDay;
+    }
+  
+    // Mettre à jour les valeurs dans l'état
+    setNewEvent({ ...newEvent, start: roundedStartDate, end: endDate });
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////////////
   // Ajouter un nouvel événement
+  /////////////////////////////////////////////////////////////////////////////////////////
   const handleAddEvent = (event: Event, tomail: string) => {
   const appointmentDate = event.start;
   const date = new Date(appointmentDate);
@@ -182,6 +202,7 @@ const MyCalendar: React.FC = () => {
 
     setInputTitle(patientDetails.name); 
   };
+/////////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <div className="p-4">
@@ -207,22 +228,18 @@ const MyCalendar: React.FC = () => {
             className="border p-2 flex-1"
             value={newEvent.start.toLocaleString("sv-SE").replace(" ", "T").slice(0, 16)}
             onChange={(e) => {
-              const startDate = roundTo30Minutes(new Date(e.target.value));
-              let endDate = new Date(startDate.getTime() + 30 * 60 * 1000);
-              // Vérifier si l'heure de fin dépasse 23:59 et l'ajuster
-              const endOfDay = new Date(startDate);
-              endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
-                // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
-              if (endDate > endOfDay) {
-                endDate = endOfDay;
-              }
-              setNewEvent({ ...newEvent, start: startDate, end: endDate });
+                const startDate = new Date(e.target.value);
+                validateAndSetDates(startDate);
             }}
           />
         </div>
 
         <button
-          onClick={() => handleAddEvent(newEvent, patientDetails.mail)}
+            onClick={() => {
+            validateAndSetDates(newEvent.start); // Révalider avant d'ajouter
+            handleAddEvent(newEvent, patientDetails.mail);
+          }}
+
           /*
           onClick={handleAddEvent(newEvent)}  --->  pas comme ceci
           L'attribut onClick attend une fonction (de type MouseEventHandler<HTMLButtonElement> 
