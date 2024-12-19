@@ -133,8 +133,7 @@ const MyCalendar: React.FC = () => {
       endDate = endOfDay;
     }
   
-    // Mettre à jour les valeurs dans l'état
-    setNewEvent({ ...newEvent, start: roundedStartDate, end: endDate });
+    return { start: roundedStartDate, end: endDate };
   };
 
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -228,16 +227,16 @@ const MyCalendar: React.FC = () => {
             className="border p-2 flex-1"
             value={newEvent.start.toLocaleString("sv-SE").replace(" ", "T").slice(0, 16)}
             onChange={(e) => {
-                const startDate = new Date(e.target.value);
-                validateAndSetDates(startDate);
+              const { start, end } = validateAndSetDates(new Date(e.target.value));
+              setNewEvent({ ...newEvent, start, end });
             }}
           />
         </div>
 
         <button
             onClick={() => {
-            validateAndSetDates(newEvent.start); // Révalider avant d'ajouter
-            handleAddEvent(newEvent, patientDetails.mail);
+              const { start, end } = validateAndSetDates(newEvent.start);
+              handleAddEvent({ ...newEvent, start, end }, patientDetails.mail);
           }}
 
           /*
@@ -284,19 +283,8 @@ const MyCalendar: React.FC = () => {
         }}
         selectable
         onSelectSlot={(slotInfo) => {
-          const start = roundTo30Minutes(slotInfo.start);
-          let end = new Date(start.getTime() + 30 * 60 * 1000);
- 
-          const endOfDay = new Date(slotInfo.start);
-          endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
-          // Si l'heure de fin dépasse 23:59, ajustez-la pour ne pas aller au-delà
-          if (end > endOfDay) {
-            end = endOfDay;
-          }
-            
+          const { start, end } = validateAndSetDates(slotInfo.start);
           const updatedEvent = { ...newEvent, start, end };
-
-          // Ajout immédiat de l'événement après sélection
           handleAddEvent(updatedEvent, patientDetails.mail);
         }}
         onSelectEvent={(event) => alert(`Événement : ${event.title} - ${event.doctor}`)}
